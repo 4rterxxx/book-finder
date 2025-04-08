@@ -1,19 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Элементы интерфейса
   const searchInput = document.getElementById('searchInput');
   const searchButton = document.getElementById('searchButton');
   const resultsContainer = document.getElementById('results');
   const bookDetailsContainer = document.getElementById('bookDetails');
   const loadingIndicator = document.getElementById('loading');
 
+  // API URL
   const API_URL = 'https://www.googleapis.com/books/v1/volumes';
 
+  // Инициализация темы
   initTheme();
 
+  // Обработчики событий
   searchButton.addEventListener('click', handleSearch);
   searchInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleSearch();
   });
 
+  // Первоначальная загрузка
   handleSearch('javascript');
 
   async function handleSearch(query) {
@@ -105,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Вспомогательные функции
   function showLoading() {
     loadingIndicator.classList.remove('hidden');
   }
@@ -134,5 +140,23 @@ document.addEventListener('DOMContentLoaded', () => {
       </p>
     `;
     document.querySelector('.retry-button').addEventListener('click', handleSearch);
+  }
+
+  // Тема
+  function initTheme() {
+    const themeToggle = document.createElement('button');
+    themeToggle.className = 'theme-toggle';
+    themeToggle.textContent = '🌓';
+    themeToggle.addEventListener('click', toggleTheme);
+    document.querySelector('.header').appendChild(themeToggle);
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
   }
 });
