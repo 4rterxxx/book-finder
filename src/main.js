@@ -9,16 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initTheme();
 
+  // Установка начального значения и первая загрузка
+  searchInput.value = 'javascript';
+  
+  // Обработчики событий
   searchButton.addEventListener('click', handleSearch);
   searchInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleSearch();
   });
 
-  handleSearch('javascript');
+  // Первоначальный поиск
+  handleSearch();
 
-  async function handleSearch(query) {
-    const searchQuery = query || searchInput.value.trim();
-    if (!searchQuery) return;
+  async function handleSearch() {
+    const searchQuery = searchInput.value.trim();
+    if (!searchQuery) {
+      showNoResults('Введите запрос для поиска');
+      return;
+    }
 
     showLoading();
     clearResults();
@@ -29,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (books.length > 0) {
         displayBooks(books);
       } else {
-        showNoResults();
+        showNoResults('Книги не найдены. Попробуйте другой запрос.');
       }
     } catch (error) {
       showError(error);
@@ -41,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function fetchBooks(query) {
     const response = await fetch(`${API_URL}?q=${encodeURIComponent(query)}&maxResults=12`);
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error('Ошибка сети');
     }
     const data = await response.json();
     return data.items || [];
@@ -59,12 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
     bookCard.className = 'book-card';
     
     const info = book.volumeInfo;
-    const title = info.title || 'Untitled';
-    const authors = info.authors ? info.authors.join(', ') : 'Unknown author';
-    const coverUrl = info.imageLinks?.thumbnail || 'https://via.placeholder.com/150x200?text=No+Cover';
+    const title = info.title || 'Без названия';
+    const authors = info.authors ? info.authors.join(', ') : 'Автор неизвестен';
+    const coverUrl = info.imageLinks?.thumbnail || 'https://via.placeholder.com/150x200?text=Обложка+отсутствует';
     
     bookCard.innerHTML = `
-      <img src="${coverUrl}" alt="${title}" onerror="this.src='https://via.placeholder.com/150x200?text=No+Cover'">
+      <img src="${coverUrl}" alt="${title}" onerror="this.src='https://via.placeholder.com/150x200?text=Обложка+отсутствует'">
       <h3>${title}</h3>
       <p>${authors}</p>
     `;
@@ -75,15 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showBookDetails(book) {
     const info = book.volumeInfo;
-    const title = info.title || 'Untitled';
-    const authors = info.authors ? info.authors.join(', ') : 'Unknown author';
-    const coverUrl = info.imageLinks?.thumbnail || 'https://via.placeholder.com/300x400?text=No+Cover';
-    const description = info.description ? `${info.description.slice(0, 200)}...` : 'No description available';
+    const title = info.title || 'Без названия';
+    const authors = info.authors ? info.authors.join(', ') : 'Автор неизвестен';
+    const coverUrl = info.imageLinks?.thumbnail || 'https://via.placeholder.com/300x400?text=Обложка+отсутствует';
+    const description = info.description ? `${info.description.slice(0, 200)}...` : 'Описание отсутствует';
     
     bookDetailsContainer.innerHTML = `
       <div class="book-detail-content">
         <div class="book-cover">
-          <img src="${coverUrl}" alt="${title}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Cover'">
+          <img src="${coverUrl}" alt="${title}" onerror="this.src='https://via.placeholder.com/300x400?text=Обложка+отсутствует'">
         </div>
         <div class="book-info">
           <h2>${title}</h2>
@@ -107,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showLoading() {
     loadingIndicator.classList.remove('hidden');
+    loadingIndicator.textContent = 'Поиск книг...';
   }
 
   function hideLoading() {
@@ -121,16 +130,16 @@ document.addEventListener('DOMContentLoaded', () => {
     bookDetailsContainer.classList.add('hidden');
   }
 
-  function showNoResults() {
-    resultsContainer.innerHTML = '<p class="no-results">No books found. Try a different search.</p>';
+  function showNoResults(message = 'Книги не найдены') {
+    resultsContainer.innerHTML = `<p class="no-results">${message}</p>`;
   }
 
   function showError(error) {
-    console.error('Error:', error);
+    console.error('Ошибка:', error);
     resultsContainer.innerHTML = `
       <p class="error-message">
-        Error loading books. Please try again later.
-        <button class="retry-button">Retry</button>
+        Ошибка при загрузке данных. Пожалуйста, попробуйте позже.
+        <button class="retry-button">Повторить</button>
       </p>
     `;
     document.querySelector('.retry-button').addEventListener('click', handleSearch);
