@@ -106,3 +106,12 @@ button:hover {
   cursor: pointer;
   color: var(--header-text);
 }
+
+.book-info a {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  margin-top: 10px;
+}
