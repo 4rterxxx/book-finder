@@ -1,24 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Элементы интерфейса
   const searchInput = document.getElementById('searchInput');
   const searchButton = document.getElementById('searchButton');
   const resultsContainer = document.getElementById('results');
   const bookDetailsContainer = document.getElementById('bookDetails');
   const loadingIndicator = document.getElementById('loading');
 
-  // API URL
   const API_URL = 'https://www.googleapis.com/books/v1/volumes';
 
-  // Инициализация темы
   initTheme();
 
-  // Обработчики событий
   searchButton.addEventListener('click', handleSearch);
   searchInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleSearch();
   });
 
-  // Первоначальная загрузка
   handleSearch('javascript');
 
   async function handleSearch(query) {
@@ -92,13 +87,13 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="book-info">
           <h2>${title}</h2>
-          <p><strong>Author:</strong> ${authors}</p>
-          ${info.publishedDate ? `<p><strong>Published:</strong> ${info.publishedDate}</p>` : ''}
-          <p><strong>Description:</strong> ${description}</p>
-          <a href="${info.infoLink}" target="_blank" rel="noopener">View on Google Books</a>
+          <p><strong>Авторы:</strong> ${authors}</p>
+          ${info.publishedDate ? `<p><strong>Опубликовано:</strong> ${info.publishedDate}</p>` : ''}
+          <p><strong>Описание:</strong> ${description}</p>
+          <a href="${info.infoLink}" target="_blank" rel="noopener">Ссылка на Google Books</a>
         </div>
       </div>
-      <button class="back-button">Back to results</button>
+      <button class="back-button">Обратно к результатам</button>
     `;
     
     bookDetailsContainer.classList.remove('hidden');
@@ -110,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Вспомогательные функции
   function showLoading() {
     loadingIndicator.classList.remove('hidden');
   }
@@ -142,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.retry-button').addEventListener('click', handleSearch);
   }
 
-  // Тема
   function initTheme() {
     const themeToggle = document.createElement('button');
     themeToggle.className = 'theme-toggle';
