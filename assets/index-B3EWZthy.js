@@ -9,13 +9,13 @@
         </div>
         <div class="book-info">
           <h2>${n}</h2>
-          <p><strong>Author:</strong> ${l}</p>
-          ${e.publishedDate?`<p><strong>Published:</strong> ${e.publishedDate}</p>`:""}
-          <p><strong>Description:</strong> ${m}</p>
-          <a href="${e.infoLink}" target="_blank" rel="noopener">View on Google Books</a>
+          <p><strong>Авторы:</strong> ${l}</p>
+          ${e.publishedDate?`<p><strong>Опубликовано:</strong> ${e.publishedDate}</p>`:""}
+          <p><strong>Описание:</strong> ${m}</p>
+          <a href="${e.infoLink}" target="_blank" rel="noopener">Ссылка на Google Books</a>
         </div>
       </div>
-      <button class="back-button">Back to results</button>
+      <button class="back-button">Обратно к результатам</button>
     `,c.classList.remove("hidden"),r.classList.add("hidden"),document.querySelector(".back-button").addEventListener("click",()=>{c.classList.add("hidden"),r.classList.remove("hidden")})}function k(){o.classList.remove("hidden")}function b(){o.classList.add("hidden")}function y(){r.innerHTML=""}function L(){c.classList.add("hidden")}function E(){r.innerHTML='<p class="no-results">No books found. Try a different search.</p>'}function w(t){console.error("Error:",t),r.innerHTML=`
       <p class="error-message">
         Error loading books. Please try again later.
